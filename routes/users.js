@@ -1,28 +1,37 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 
-// Signup route
-router.post('/signup', (req, res) => {
-  // Add logic for user signup
-  res.send('User signed up');
-});
+const prisma = new PrismaClient();
 
-// Login route
-router.post('/login', (req, res) => {
-  // Add logic for user login
-  res.send('User logged in');
-});
+router.post('/signup', async (req, res) => {
+  const { email, password, first_name, last_name } = req.body;
 
-// Logout route
-router.post('/logout', (req, res) => {
-  // Add logic for user logout
-  res.send('User logged out');
-});
+  // Check for blank fields
+  if (!email || !password || !first_name || !last_name) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
 
-// Get user session route
-router.get('/getSession', (req, res) => {
-  // Add logic to retrieve user session
-  res.send('User session info');
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await prisma.customer.create({
+      data: {
+        email,
+        password: hashedPassword,
+        first_name,
+        last_name,
+      },
+    });
+
+    res.status(201).json({ message: 'User registered successfully', user: newUser });
+  } catch (error) {
+    if (error.code === 'P2002') {
+      res.status(400).json({ error: 'Email already in use' });
+    } else {
+      res.status(500).json({ error: 'Failed to register user' });
+    }
+  }
 });
 
 module.exports = router;

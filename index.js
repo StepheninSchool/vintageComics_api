@@ -8,6 +8,7 @@ const productsRoute = require('./routes/products');
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Allows parsing of URL-encoded data
 
 // Use the routes
 app.use('/users', usersRoute);
