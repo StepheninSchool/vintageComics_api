@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -17,7 +17,7 @@ model Product {
   product_id     Int     @id @default(autoincrement())
   name           String
   description    String?
-  cost           Decimal @db.Decimal(10, 2)
+  cost           Float 
   image_filename String?
 }
 
