@@ -71,4 +71,24 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Logout route
+router.post('/logout', (req, res) => {
+  // To-do: Clear session or token 
+  res.status(200).json({ message: 'User logged out successfully' });
+});
+
+// Get user session route
+router.get('/getSession', (req, res) => {
+
+  // To do: Check if a session or token exists and return session data
+  if (req.session && req.session.user)
+    res.status(200).json({ session: req.session.user });
+  else {
+    res.status(401).json({ error: 'No active session' });
+  }
+});
+
+
+
+
 module.exports = router;

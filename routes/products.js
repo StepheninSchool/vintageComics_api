@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 
 // Purchase route
 router.post('/purchase', (req, res) => {
-  // Add logic to handle product purchase
+  // To-do: Add logic to handle product purchase
   res.send('Purchase completed');
 });
 
