@@ -1,23 +1,28 @@
-const express = require('express');
-const path = require('path'); // Add this line
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import usersRoute from './routes/users.js';
+import productsRoute from './routes/products.js';
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Import routes
-const usersRoute = require('./routes/users');
-const productsRoute = require('./routes/products');
+// Resolve directory paths for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Middleware to parse JSON
+// Middleware for JSON and URL-encoded data
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Allows parsing of URL-encoded data
+app.use(express.urlencoded({ extended: true }));
 
-// Serve images from the public/images folder
+// Serve static files
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
-// Use the routes
+// Define routes
 app.use('/users', usersRoute);
 app.use('/products', productsRoute);
 
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

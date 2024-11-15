@@ -1,15 +1,13 @@
-const express = require('express');
-const { PrismaClient } = require('@prisma/client'); // Import PrismaClient
-const prisma = new PrismaClient(); // Initialize PrismaClient
+import express from 'express';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 const router = express.Router();
 
 // Get all products route
 router.get('/all', async (req, res) => {
   try {
-    // Fetch all products from the database
     const products = await prisma.product.findMany();
-    
-    // Send the list of products as JSON
     res.status(200).json(products);
   } catch (error) {
     console.error('Error retrieving products:', error);
@@ -22,7 +20,7 @@ router.get('/:id', async (req, res) => {
   const productId = req.params.id;
   try {
     const product = await prisma.product.findUnique({
-      where: { product_id: Number(productId) }, 
+      where: { product_id: Number(productId) },
     });
     if (product) {
       res.status(200).json(product);
@@ -35,11 +33,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
 // Purchase route
 router.post('/purchase', (req, res) => {
   // To-do: Add logic to handle product purchase
   res.send('Purchase completed');
 });
 
-module.exports = router;
+export default router;
