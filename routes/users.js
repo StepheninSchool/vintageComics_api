@@ -12,8 +12,19 @@ router.post('/signup', async (req, res) => {
   if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ error: 'All fields are required' });
   }
-
+  //altered try-catch to directly query the database, per Michael's suggestion.
   try {
+    // Check if the email already exists in the database
+    const existingUser = await prisma.customer.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      // If a user with the same email exists, return a 400 error
+      return res.status(400).json({ error: 'Email already in use' });
+    }
+
+    // If the email does not exist, proceed with creating the new user
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.customer.create({
@@ -25,11 +36,7 @@ router.post('/signup', async (req, res) => {
       user: { email: newUser.email },
     });
   } catch (error) {
-    if (error.code === 'P2002') {
-      res.status(400).json({ error: 'Email already in use' });
-    } else {
-      res.status(500).json({ error: 'Failed to register user' });
-    }
+    res.status(500).json({ error: 'Failed to register user' });
   }
 });
 
