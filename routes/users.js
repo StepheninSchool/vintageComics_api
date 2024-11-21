@@ -2,9 +2,14 @@ import express from 'express';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
+import '../Utilities/passwordSchema.js';
+import passwordSchema from '../Utilities/passwordSchema.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+
+
 
 // Signup route
 router.post('/signup', async (req, res) => {
@@ -13,6 +18,29 @@ router.post('/signup', async (req, res) => {
   if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ error: 'All fields are required' });
   }
+
+  // Define custom error messages for each policy rule
+  const passwordErrorMessages = {
+    min: 'Password must be a minimum of 8 characters long',
+    uppercase: 'Password must contain alteast 1 uppercase character',
+    lowercase: 'Password must contain atleasat 1 lowercase character',
+    digits: 'Password must contain atleast one number',
+  };
+  
+  // Validate the password against the schema and if invalid, return a list of failed rules
+  const passwordErrors = passwordSchema.validate(password, {list: true});
+
+  // Map the failed validation rules to the custom error messages
+  const detailedErrors = passwordErrors.map(error => passwordErrorMessages[error]);
+  
+  // If any policy rule fails, return the failed rules as json
+  if (passwordErrors.length > 0) {
+    return res.status(400).json({
+      error: 'Password does not meet the requirements',
+      details: detailedErrors,
+    });
+  }
+
   //altered try-catch to directly query the database, per Michael's suggestion.
   try {
     // Check if the email already exists in the database
