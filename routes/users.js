@@ -70,13 +70,17 @@ router.post('/login', async (req, res) => {
     // Setup session
     req.session.email = user.email;
     req.session.user_id = user.customer_id; 
-    req.session.name = `${user.first_name} ${user.last_name}`;
-    req.session.user = { email: user.email, user_id: user.customer_id,name: `${user.first_name} ${user.last_name}`,};
+    req.session.name = user.first_name + user.last_name;
+    req.session.first_name = user.first_name;
+    req.session.last_name = user.last_name;
+    req.session.user = { email: user.email, user_id: user.customer_id,first_name: user.first_name, last_name: user.last_name, };
+    // req.session.user = { email: user.email, user_id: user.customer_id,name: user.first_name +  ' ' + user.last_name, };
     console.log('Logged in user: ' + req.session.email);
 
 
     //send response
     res.status(200).json({ message: 'Login successful', email: user.email });
+    console.log('Session data after login:', req.session.user);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while trying to log in' });
   }
@@ -84,13 +88,22 @@ router.post('/login', async (req, res) => {
 
 // Logout route
 router.post('/logout', (req, res) => {
-  res.status(200).json({ message: 'User logged out successfully' });
+  if(req.session){
+    req.session.destroy();
+  }
+  res.status(200).json({ message: 'User logged out successfully'});
 });
 
 // Get user session route
 router.get('/getSession', (req, res) => {
   //return values in session for logged in user
-  res.json('Who is logged in: ' + req.session.email);
+  if(req.session && req.session.user) {
+    const {user_id, email, first_name, last_name} = req.session.user;
+    // const {user_id, email, name} = req.session.user;
+    // return res.status(200).json({user_id, email, name}); // Using name instead of first_name + last_name
+    return res.status(200).json({user_id, email, first_name, last_name});
+  }
+  res.status(401).json({ message: 'Not logged in.'});
 });
 
 export default router;
