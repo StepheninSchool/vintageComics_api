@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 
@@ -42,26 +43,36 @@ router.post('/signup', async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
+
   // get user inputs
   const { email, password } = req.body;
+
   // validate the inputs
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
+
   // find user in database
   try {
     const user = await prisma.customer.findUnique({ where: { email } });
+
     // validate user exists
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+
     // validate the password entered is correct
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    // Setup session
 
+    // Setup session
+    req.session.email = user.email;
+    req.session.user_id = user.customer_id; 
+    req.session.name = `${user.first_name} ${user.last_name}`;
+    req.session.user = { email: user.email, user_id: user.customer_id,name: `${user.first_name} ${user.last_name}`,};
+    console.log('Logged in user: ' + req.session.email);
 
 
     //send response
@@ -78,11 +89,8 @@ router.post('/logout', (req, res) => {
 
 // Get user session route
 router.get('/getSession', (req, res) => {
-  if (req.session && req.session.user) {
-    res.status(200).json({ session: req.session.user });
-  } else {
-    res.status(401).json({ error: 'No active session' });
-  }
+  //return values in session for logged in user
+  res.json('Who is logged in: ' + req.session.email);
 });
 
 export default router;

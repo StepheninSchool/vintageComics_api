@@ -26,7 +26,8 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')))
 // Cors Middleware
 app.use(
   cors({
-    credentials: true //allows cookies, allowing login session to be stored.
+    // origin: 'http://localhost:5000',
+    credentials: true, //allows cookies, allowing login session to be stored.
   })
 )
 
