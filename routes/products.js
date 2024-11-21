@@ -1,48 +1,60 @@
-import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import express from 'express'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
-const router = express.Router();
+const prisma = new PrismaClient()
+const router = express.Router()
 
 // Get all products route
 router.get('/all', async (req, res) => {
   try {
-    const products = await prisma.product.findMany();
-    res.status(200).json(products);
+    const products = await prisma.product.findMany()
+    res.status(200).json(products)
   } catch (error) {
-    console.error('Error retrieving products:', error);
-    res.status(500).json({ error: 'An error occurred while retrieving products' });
+    console.error('Error retrieving products:', error)
+    res
+      .status(500)
+      .json({ error: 'An error occurred while retrieving products' })
   }
-});
+})
 
 // Get product by ID route
 router.get('/:id', async (req, res) => {
-  const productId = Number(req.params.id);
+  const productId = Number(req.params.id)
 
   //validate id is a number
-  if (!Number.isInteger(productId)){
-    return res.status(400).json({error: 'Invalid product ID. Must be an integer'});
+  if (!Number.isInteger(productId)) {
+    return res
+      .status(400)
+      .json({ error: 'Invalid product ID. Must be an integer' })
   }
 
   try {
     const product = await prisma.product.findUnique({
-      where: { product_id: Number(productId) },
-    });
+      where: { product_id: Number(productId) }
+    })
     if (product) {
-      res.status(200).json(product);
+      res.status(200).json(product)
     } else {
-      res.status(404).json({ error: 'No product found.' });
+      res.status(404).json({ error: 'No product found.' })
     }
   } catch (error) {
-    console.error('Error retrieving product by ID:', error);
-    res.status(500).json({ error: 'An error occurred while retrieving product' });
+    console.error('Error retrieving product by ID:', error)
+    res
+      .status(500)
+      .json({ error: 'An error occurred while retrieving product' })
   }
-});
+})
 
 // Purchase route
 router.post('/purchase', (req, res) => {
   // To-do: Add logic to handle product purchase
-  res.send('Purchase completed');
-});
+  // Validate a user is logged in to access the purchase route
 
-export default router;
+  if (!req.session.user) {
+    res.status(401).json({ error: 'Unauthorized access.  Please Log-in.' });
+    return;
+  }
+  res.status(200).json({ message: 'Purchase completed' })
+})
+
+export default router

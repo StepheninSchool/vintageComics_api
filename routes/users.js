@@ -3,7 +3,7 @@ import session from 'express-session';
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 import '../Utilities/passwordSchema.js';
-import passwordSchema from '../Utilities/passwordSchema.js';
+
 
 const router = express.Router();
 const prisma = new PrismaClient();
