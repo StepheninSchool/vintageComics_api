@@ -106,7 +106,7 @@ router.post('/purchase', async (req, res) => {
     });
 
     // Return success Messages
-    res.status(201).json({ message: 'Purchase completed successfully!', purchase_id: purchase.purchase_id });
+    res.status(201).json({ message: 'Purchase completed successfully!', purchaseItems });
   } catch (error) {
     console.error('Error completing purchase:', error);
     res.status(500).json({ error: 'An error occurred while processing your purchase. Please try again.' });
