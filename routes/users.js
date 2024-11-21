@@ -42,24 +42,29 @@ router.post('/signup', async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
+  // get user inputs
   const { email, password } = req.body;
-
+  // validate the inputs
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
-
+  // find user in database
   try {
     const user = await prisma.customer.findUnique({ where: { email } });
-
+    // validate user exists
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
+    // validate the password entered is correct
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
+    // Setup session
 
+
+
+    //send response
     res.status(200).json({ message: 'Login successful', email: user.email });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while trying to log in' });
