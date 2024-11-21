@@ -39,10 +39,10 @@ model Purchase {
   postal_code     String
   credit_card     String
   credit_expire   String
-  credit_cvv      Int
-  invoice_amt     Float
-  invoice_tax     Float
-  invoice_total   Float
+  credit_cvv      String
+  invoice_amt     String
+  invoice_tax     String
+  invoice_total   String
   order_date      DateTime
 }
 
