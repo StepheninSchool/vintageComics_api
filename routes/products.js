@@ -19,10 +19,11 @@ router.get('/all', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const productId = Number(req.params.id);
 
+  //validate id is a number
   if (!Number.isInteger(productId)){
     return res.status(400).json({error: 'Invalid product ID. Must be an integer'});
   }
-  
+
   try {
     const product = await prisma.product.findUnique({
       where: { product_id: Number(productId) },
@@ -30,7 +31,7 @@ router.get('/:id', async (req, res) => {
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(404).json({ error: 'Product not found' });
+      res.status(404).json({ error: 'No product found.' });
     }
   } catch (error) {
     console.error('Error retrieving product by ID:', error);

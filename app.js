@@ -1,8 +1,10 @@
 import express from 'express';
+import session from 'express-station';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import usersRoute from './routes/users.js';
 import productsRoute from './routes/products.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
