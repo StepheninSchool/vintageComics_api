@@ -15,6 +15,7 @@ router.post('/signup', async (req, res) => {
   }
 
   // Define custom error messages for each policy rule
+  // SOURCE : https://expressjs.com/en/guide/error-handling.html
   const passwordErrorMessages = {
     min: 'Password must be a minimum of 8 characters long',
     uppercase: 'Password must contain alteast 1 uppercase character',
@@ -23,7 +24,7 @@ router.post('/signup', async (req, res) => {
   }
 
   // Validate the password against the schema and if invalid, return a list of failed rules
-  // SOURCE : https://expressjs.com/en/guide/error-handling.html
+  // SOURCE : https://www.npmjs.com/package/password-validator
   const passwordErrors = passwordSchema.validate(password, { list: true })
 
   // Map the failed validation rules to the custom error messages
