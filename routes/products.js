@@ -54,7 +54,7 @@ router.post('/purchase', async (req, res) => {
   const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total } = req.body
   
   // Ensure the user is logged in to make a purchase
-  if ( !req.session.user || !req.session.user.id  ) {
+  if ( !req.session.user ) {
     res.status(401).json({ error: 'Unauthorized access.' })
     return
   }
