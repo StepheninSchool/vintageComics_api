@@ -1,4 +1,6 @@
 // Import the PasswordValidator library 
+// SOURCE : https://www.npmjs.com/package/password-validator
+
 import PasswordValidator from "password-validator";
 
 // Create a new password schema instance
