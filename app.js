@@ -10,7 +10,10 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // Cors configuration
-app.use(cors({ credentials: true }))
+// SOURCE : https://www.npmjs.com/package/cors#configuring-cors
+const corsOptions = {
+  credentials: true, //allows cookies, allowing login session to be stored.
+}
 
 // Resolve directory paths for ES Modules
 const __filename = fileURLToPath(import.meta.url)
@@ -19,17 +22,8 @@ const __dirname = path.dirname(__filename)
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-// Serve static files
-app.use('/images', express.static(path.join(__dirname, 'public/images')))
-
-// Cors Middleware
-app.use(
-  cors({
-    // origin: 'http://localhost:5000',
-    credentials: true, //allows cookies, allowing login session to be stored.
-  })
-)
+app.use(cors({corsOptions}))
+app.use('/images', express.static(path.join(__dirname, 'public/images'))) // Serve static files
 
 // Express-session Middleware
 app.use(

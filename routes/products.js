@@ -4,79 +4,83 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 const router = express.Router()
 
-// Get all products route
+// GET All Products Route
 router.get('/all', async (req, res) => {
   try {
-    const products = await prisma.product.findMany()
-    res.status(200).json(products)
+    // SOURCE : https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany
+    const products = await prisma.product.findMany() 
+    res.status(200).json(products) 
   } catch (error) {
     console.error('Error retrieving products:', error)
-    res
-      .status(500)
-      .json({ error: 'An error occurred while retrieving products' })
+    res.status(500).json({ error: 'An error occurred while retrieving products' }) 
   }
 })
 
-// Get product by ID route
+// GET Product by ID Route
 router.get('/:id', async (req, res) => {
-  const productId = Number(req.params.id)
 
-  //validate id is a number
+  // Convert ID from params to a number
+  const productId = Number(req.params.id) 
+
+  // Validate that the ID is a valid integer
   if (!Number.isInteger(productId)) {
     return res
       .status(400)
-      .json({ error: 'Invalid product ID. Must be an integer' })
+      .json({ error: 'Invalid product ID. Must be an integer' })  
   }
 
   try {
+    // Find product by its unique ID
     const product = await prisma.product.findUnique({
-      where: { product_id: Number(productId) }
+      where: { product_id: Number(productId) }  
     })
     if (product) {
-      res.status(200).json(product)
+      // Return the found product
+      res.status(200).json(product) 
     } else {
-      res.status(404).json({ error: 'No product found.' })
+      // Handle case where product does not exist
+      res.status(404).json({ error: 'No product found.' }) 
     }
   } catch (error) {
     console.error('Error retrieving product by ID:', error)
-    res
-      .status(500)
-      .json({ error: 'An error occurred while retrieving product' })
+    // Handle unexpected errors
+    res.status(500).json({ error: 'An error occurred while retrieving product' }) 
   }
 })
 
-// Purchase route
+// PURCHASE Product Route
 router.post('/purchase', async (req, res) => {
-  // To-do: Add logic to handle product purchase
-  const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total} = req.body;
+  const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total } = req.body
 
-  // Validate a user is logged in to access the purchase route
+  // Ensure the user is logged in to make a purchase
   if (!req.session.user) {
-    res.status(401).json({ error: 'Unauthorized access.  Please Log-in.' });
-    return;
+    res.status(401).json({ error: 'Unauthorized access. Please Log-in.' })
+    return
   }
+  
+  // Extract user ID from the session
+  const { user_id } = req.session.user
 
-  const { user_id } = req.session.user;
-
-  // Validate the input fields
-  if ( !street || !city || !province || !country ||!postal_code || !credit_card || !credit_expire || !credit_cvv || !cart || !invoice_amt || !invoice_tax || !invoice_total ){
-    return res.status(400).json({ error: 'All fields required to complete purchase'})
+  // Validate that all required fields are present
+  if (!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire || !credit_cvv || !cart || !invoice_amt || !invoice_tax || !invoice_total) {
+    // Return error if any field is missing
+    return res.status(400).json({ error: 'All fields required to complete purchase' }) 
   }
 
   try {
-    // Parse the cart string, convert to array and count product quantities
-    const cartItems = cart.split(',').map(Number); // convert to array of numbers
-    const productQuantity = {};
+    // Parse the cart to get product IDs and their quantities
+    const cartItems = cart.split(',').map(Number) 
+    const productQuantity = {} 
 
+    // Count each product in the cart
     cartItems.forEach((productId) => {
-      if (!productQuantity[productId]){
-        productQuantity[productId] = 0;
+      if (!productQuantity[productId]) {
+        productQuantity[productId] = 0
       }
-      productQuantity[productId]++;
-    });
+      productQuantity[productId]++
+    })
 
-
-    //create a new Purchase record 
+    // Create a new purchase record in the database
     const purchase = await prisma.purchase.create({
       data: {
         customer_id: user_id,
@@ -91,26 +95,30 @@ router.post('/purchase', async (req, res) => {
         invoice_amt,
         invoice_tax,
         invoice_total,
-        order_date: new Date()
+        order_date: new Date() 
       }
-    });
-    // Insert into PurchaseItem table for each product in the cart
-    const purchaseItems = Object.entries(productQuantity).map(([product_id, quantity]) => ({
-      purchase_id: purchase.purchase_id,
-      product_id: parseInt(product_id, 10),
-      quantity
-    }));
+    }) 
 
+    // Prepare purchase items to be inserted into database
+    const purchaseItems = Object.entries(productQuantity).map(([product_id, quantity]) => ({
+      purchase_id: purchase.purchase_id, 
+      // SOURCE : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+      product_id: parseInt(product_id, 10),
+      quantity 
+    }))
+
+    // Insert all purchase items into the database
+    // SOURCE : https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
     await prisma.purchaseItem.createMany({
       data: purchaseItems
-    });
+    })  
 
-    // Return success Messages
-    res.status(201).json({ message: 'Purchase completed successfully!', purchaseItems });
+    // Return success message along with purchase items
+    res.status(201).json({ message: 'Purchase completed successfully!', purchaseItems })
   } catch (error) {
-    console.error('Error completing purchase:', error);
-    res.status(500).json({ error: 'An error occurred while processing your purchase. Please try again.' });
+    console.error('Error completing purchase:', error)
+    res.status(500).json({ error: 'An error occurred while processing your purchase. Please try again.' }) // Handle unexpected errors
   }
-});
+})
 
 export default router
