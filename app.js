@@ -16,13 +16,14 @@ const corsOptions = {
 }
 
 // Resolve directory paths for ES Modules
+// SOURCE - https://nodejs.org/api/esm.html#importmetaurl
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({corsOptions}))
+app.use(cors(corsOptions))
 app.use('/images', express.static(path.join(__dirname, 'public/images'))) // Serve static files
 
 // Express-session Middleware
