@@ -1,85 +1,96 @@
 /* Global Styles */
-/* Set a global font family and background for the application */
 body {
-    font-family: 'Arial', sans-serif; /* Fallback to sans-serif */
-    background-color: #f8f9fa; /* Light gray background for consistency */
+    font-family: 'Arial', sans-serif; /* Custom font */
+    background-color: #f8f9fa; /* Light gray background */
     margin: 0;
     padding: 0;
 }
 
-/* Header Styles */
-/* Style the header background and text */
+/* Header */
 header {
-    background-color: #343a40; /* Dark gray header for contrast */
-    color: white; /* Text color for visibility */
-    padding: 1rem; /* Add spacing inside the header */
-    text-align: center; /* Center align header text */
+    background-color: #343a40;
+    color: white;
+    padding: 1rem;
+    text-align: center;
 }
 
-/* Navigation Link Styles */
-/* Default styles for navigation links in the header */
 header nav a {
-    color: #ffffff; /* White text for contrast against dark header */
-    text-decoration: none; /* Remove default underline */
-    margin: 0 1rem; /* Add spacing between links */
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 1rem;
 }
 
-/* Hover state for navigation links */
 header nav a:hover {
-    text-decoration: underline; /* Underline link text on hover */
+    text-decoration: underline;
 }
 
-/* Card Styles */
-/* Add rounded corners and shadow for card components */
-.card {
-    border-radius: 40px; /* Smooth rounded corners */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+/* Custom Card Styles */
+.custom-card {
+    border-radius: 40px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* Button Styles */
-/* Primary button with rounded corners */
-.btn-primary {
-    background-color: #007bff; /* Bootstrap primary blue */
-    border: none; /* Remove default border */
-    border-radius: 5px; /* Rounded corners for a modern look */
+/* Buttons */
+.rounded-btn {
+    border-radius: 40px;
 }
 
-/* Primary button hover state */
 .btn-primary:hover {
-    background-color: #0056b3; /* Darker blue for hover effect */
+    background-color: #0056b3;
 }
 
-/* Outline secondary button */
-/* Style for secondary outline button */
-.btn-outline-secondary {
-    color: #6c757d; /* Bootstrap secondary gray */
-    border-color: #6c757d; /* Match border with text */
-}
-
-/* Outline secondary button hover state */
 .btn-outline-secondary:hover {
-    background-color: #6c757d; /* Change background to gray */
-    color: #fff; /* Make text white on hover */
+    background-color: #6c757d;
+    color: #fff;
 }
 
-/* Product Image Styles */
-/* Image styling for product images in cards */
-.product-image {
-    height: 600px; /* Set consistent height */
-    object-fit: cover; /* Ensure images fit without distortion */
-    position: relative; /* Maintain relative positioning */
+/* Images */
+.card .product-image {
+    height: 100px;
+    object-fit: cover;
 }
 
+.product-image-large {
+    max-height: 600px;
+    object-fit: cover;
+}
 
-/* Alert Styles */
-/* Center a Bootstrap alert in the middle of the screen */
+/* Alerts */
 .alert-center {
-    position: fixed; /* Fixed position relative to the viewport */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust to truly center the alert */
-    z-index: 1050; /* Ensure it appears above other elements */
-    text-align: center; /* Center the text inside the alert */
-    max-width: 90%; /* Constrain width on smaller screens */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .product-image-small {
+        height: 150px;
+    }
+    .product-image-large {
+        max-height: 400px;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-image-small {
+        height: 180px;
+    }
+    .product-image-large {
+        max-height: 500px;
+    }
+}
+
+@media (min-width: 992px) {
+    .product-image-small {
+        height: 350px;
+    }
+    .product-image-large {
+        max-height: 700px;
+    }
 }
