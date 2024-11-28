@@ -3,50 +3,48 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 const router = express.Router()
-
-// GET All Products Route
+// Find all products
 router.get('/all', async (req, res) => {
   try {
-    // SOURCE : https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany
-    const products = await prisma.product.findMany() 
-    res.status(200).json(products) 
+    const products = await prisma.product.findMany();
+
+    res.status(200).json(products); // Send products with `image_filename`
   } catch (error) {
-    console.error('Error retrieving products:', error)
-    res.status(500).json({ error: 'An error occurred while retrieving products' }) 
+    console.error('Error retrieving products:', error);
+    res.status(500).json({ error: 'An error occurred while retrieving products' });
   }
-})
+});
 
-// GET Product by ID Route
+// Find product by ID
 router.get('/:id', async (req, res) => {
+  const productId = Number(req.params.id);
 
-  // Convert ID from params to a number
-  const productId = Number(req.params.id) 
-
-  // Validate that the ID is a valid integer
+  // Validate product ID
   if (!Number.isInteger(productId)) {
-    return res
-      .status(400)
-      .json({ error: 'Invalid product ID. Must be an integer' })  
+    return res.status(400).json({ error: 'Invalid product ID. Must be an integer.' });
   }
 
   try {
-    // Find product by its unique ID
+    const baseURL = 'http://localhost:5000/images/';
     const product = await prisma.product.findUnique({
-      where: { product_id: Number(productId) }  
-    })
+      where: { product_id: productId },
+    });
+
     if (product) {
-      // Return the found product
-      res.status(200).json(product) 
+      const productWithImage = {
+        ...product,
+        image_url: `${baseURL}${product.image_filename}`, // Dynamically generate image URL
+      };
+      res.status(200).json(productWithImage);
     } else {
-      // Handle case where product does not exist
-      res.status(404).json({ error: 'No product found.' }) 
+      res.status(404).json({ error: 'Product not found.' });
     }
   } catch (error) {
-    console.error('Error retrieving product by ID:', error)
-    // Handle unexpected errors
-    res.status(500).json({ error: 'An error occurred while retrieving product' }) 
+    console.error('Error retrieving product:', error);
+    res.status(500).json({ error: 'An error occurred while retrieving the product.' });
   }
-})
+});
+
 
 // PURCHASE Product Route
 router.post('/purchase', async (req, res) => {

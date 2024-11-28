@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from './ui/Sidebar';
+import Nav from './ui/Nav';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -7,15 +7,15 @@ function App() {
   return (
     <>
       <h1>Welcome to Vintage Comics</h1>
-      <p>This is the parent 'master' page.</p>
+      <p>This is the navigation bar.</p>
       
       <div>
-        <Sidebar />
+        <Nav />
       </div>
       
       <hr />
       <div>
-        <p>This is the child page:</p>
+        <p>This is the gallery:</p>
         <Outlet />
       </div>
     </>

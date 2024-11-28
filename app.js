@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 5000
 // SOURCE : https://www.npmjs.com/package/cors#configuring-cors
 const corsOptions = {
   credentials: true, //allows cookies, allowing login session to be stored.
+  //origin: 'http://localhost:5173',
 }
 
 // Resolve directory paths for ES Modules
@@ -24,7 +25,7 @@ const __dirname = path.dirname(__filename)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors(corsOptions))
-app.use('/images', express.static(path.join(__dirname, 'public/images'))) // Serve static files
+app.use(express.static('public'));
 
 // Express-session Middleware
 app.use(
