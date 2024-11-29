@@ -25,6 +25,7 @@ export default function Cart() {
         const productsWithQuantities = [];
 
         // Fetch product details using for...of loop
+        // SOURCE: https://www.w3schools.com/js/js_loop_forof.asp
         for (const id of uniqueProductIds) {
           const response = await fetch(`${apiUrl}/products/${id}`);
           if (!response.ok) {
@@ -62,7 +63,7 @@ export default function Cart() {
 
   return (
     <div className="container my-5">
-      <h1 className="text-center">Your Shopping Cart</h1>
+      <h1 className="text-center p-1 shadow">Your Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <p className="text-center">
           Your cart is empty. <Link to="/">Start shopping!</Link>

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const apiUrl = import.meta.env.VITE_API_HOST
 
@@ -21,42 +21,36 @@ export default function Home () {
 
   return (
     <div className='container'>
-      <h1 className='text-center my-4'>The Gallery</h1>
+      <h1 className='text-center my-4 p-1 shadow-lg'>The Gallery</h1>
       <div className='row'>
         {products.map(product => (
-          <div
-            key={product.product_id}
-            className='col-sm-6 col-md-4 col-lg-3 mb-4'
-          >
+          <div key={product.product_id} className='col-md-3 mb-4'>
             <div className='card h-100 shadow'>
-              <div className='overflow-hidden' style={{ height: '150px' }}>
+              {/* Removed "view details" button and made the image itself clickable for a cleaner look. */}
+              <Link to={`/details/${product.product_id}`}>
                 <img
                   src={`${apiUrl}/images/${product.image_filename}`}
                   alt={product.name}
-                  className='card-img-top'
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    objectFit: 'cover'
-                  }}
+                  className='card-img-top img-fluid'
+                  style={{ height: '200px', objectFit: 'cover' }}
                 />
-              </div>
-              <div className='card-body text-center'>
-                <h6 className='card-title'>{product.name}</h6>
+              </Link>
+              {/* Rest of the card remains static */}
+              <div className='card-body d-flex flex-column justify-content-between'>
+                <h5 className='card-title'>{product.name}</h5>
                 <p className='card-text text-success fw-bold'>
-                  {/* SOURCE: https://www.w3schools.com/jsref/jsref_tolocalestring.asp  Using commas in number with decimals.*/}
-                  $
-                  {product.cost.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}
+                  <p>
+                    <span className='text-success'>
+                      {/* format price with commas and 2 decimal places}
+                      {/* SOURCE: https://www.w3schools.com/jsref/jsref_tolocalestring.asp#gsc.tab=0 */}
+                      $
+                      {Number(product.cost).toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })}
+                    </span>
+                  </p>
                 </p>
-                <Link
-                  to={`/details/${product.product_id}`}
-                  className='btn btn-primary rounded-pill mt-2'
-                >
-                  View Details
-                </Link>
               </div>
             </div>
           </div>
