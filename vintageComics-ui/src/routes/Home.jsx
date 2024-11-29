@@ -38,9 +38,9 @@ export default function Home () {
               {/* Rest of the card remains static */}
               <div className='card-body d-flex flex-column justify-content-between'>
                 <h5 className='card-title'>{product.name}</h5>
-                <p className='card-text text-success fw-bold'>
+                <p className='card-text fw-bold'>$
                   <span className='text-success'>
-                    {/* Format price with commas and 2 decimal places */}$
+                    {/* Format price with commas and 2 decimal places */}
                     {Number(product.cost).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2

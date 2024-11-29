@@ -100,6 +100,8 @@ export default function Details() {
               <p>
                 <strong>Price:</strong>{' '}
                 <span className='text-success'>
+                  {/* SOURCE: commas in number strings */}
+                  {/*https://www.w3schools.com/jsref/jsref_tolocalestring.asp*/}
                   ${Number(product.cost).toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
