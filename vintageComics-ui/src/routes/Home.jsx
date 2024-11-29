@@ -39,17 +39,13 @@ export default function Home () {
               <div className='card-body d-flex flex-column justify-content-between'>
                 <h5 className='card-title'>{product.name}</h5>
                 <p className='card-text text-success fw-bold'>
-                  <p>
-                    <span className='text-success'>
-                      {/* format price with commas and 2 decimal places}
-                      {/* SOURCE: https://www.w3schools.com/jsref/jsref_tolocalestring.asp#gsc.tab=0 */}
-                      $
-                      {Number(product.cost).toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                      })}
-                    </span>
-                  </p>
+                  <span className='text-success'>
+                    {/* Format price with commas and 2 decimal places */}$
+                    {Number(product.cost).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}
+                  </span>
                 </p>
               </div>
             </div>
