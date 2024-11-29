@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <h1>Welcome to Vintage Comics</h1>
-      <p>This is the navigation bar.</p>
+      <br />
       
       <div>
         <Nav />
@@ -15,7 +15,6 @@ function App() {
       
       <hr />
       <div>
-        <p>This is the gallery:</p>
         <Outlet />
       </div>
     </>

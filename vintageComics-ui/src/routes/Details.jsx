@@ -43,7 +43,7 @@ export default function Details() {
     currentCart.push(productId.toString());
   
     // Update the cookie with the updated cart
-    setCookie("cart", currentCart.join(","), { path: "/", maxAge: 30 * 24 * 60 * 60 }); // 30 days expiry
+    setCookie("cart", currentCart.join(","), { path: "/", maxAge: 3600000 }); // 1 hour expiry
     console.log("Updated Cart Cookie:", currentCart);
   
     // Notify the user
@@ -64,11 +64,12 @@ export default function Details() {
   // Render product details if `product` is successfully loaded
   return (
     <div className="container my-5">
+     
+
+      <div className="bg-light p-4 rounded shadow-lg">
       <Link to="/home" className="btn btn-outline-secondary mb-3">
         Go Back
       </Link>
-
-      <div className="bg-light p-4 rounded shadow-lg">
         <h1 className="text-center display-4 text-primary mb-4">
           Comic #{product.product_id}
         </h1>
@@ -76,7 +77,9 @@ export default function Details() {
         {product && (
           <div className="row">
             <div className="col-md-6">
-              <h2 className="text-secondary">{product.name}</h2>
+              <h2 className="text-secondary">
+              <p>
+                <strong>Name:</strong> {product.name}</p></h2>
               <p>
                 <strong>Description:</strong> {product.description}
               </p>
@@ -84,7 +87,7 @@ export default function Details() {
                 <strong>Price:</strong> ${product.cost.toFixed(2)}
               </p>
               <button
-                className="btn btn-success w-100"
+                className="btn btn-primary rounded-pill mt-2 border align-self-stretch"
                 onClick={() => addToCart(product.product_id)}
               >
                 Add to Cart
@@ -96,7 +99,7 @@ export default function Details() {
                 src={`${apiUrl}/images/${product.image_filename}`} // Dynamically generated image URL
                 alt={`${product.name} cover`}
                 className="img-fluid rounded shadow"
-                style={{ maxHeight: "400px", objectFit: "cover" }}
+                style={{ maxHeight: "100%", objectFit: "cover" }}
               />
             </div>
           </div>
