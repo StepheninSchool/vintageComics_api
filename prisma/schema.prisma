@@ -27,7 +27,6 @@ model Customer {
   password    String
   first_name  String
   last_name   String
-  cart        String? //cart storedJSON string
 }
 
 model Purchase {
@@ -41,9 +40,6 @@ model Purchase {
   credit_card     String
   credit_expire   String
   credit_cvv      String
-  invoice_amt     String
-  invoice_tax     String
-  invoice_total   String
   order_date      DateTime
 }
 
