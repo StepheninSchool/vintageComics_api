@@ -1,38 +1,35 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useOutletContext } from 'react-router-dom';
 
-const apiUrl = import.meta.env.VITE_API_HOST; // API base URL
+const apiUrl = import.meta.env.VITE_API_HOST;
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm(); // React Hook Form setup
-  const [serverError, setServerError] = useState(""); // State to store server error messages
-  const navigate = useNavigate(); // Navigation hook
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [serverError, setServerError] = useState('');
+  const navigate = useNavigate();
+  const setIsLoggedIn = useOutletContext(); // Access setIsLoggedIn
 
-  // Handle form submission
   const onSubmit = async (data) => {
     try {
       const response = await fetch(`${apiUrl}/users/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include', // Send session cookie
       });
 
       if (response.ok) {
-        const result = await response.json();
-        console.log("Login successful:", result);
-        navigate("/home"); // Redirect to home page
+        setIsLoggedIn(true); // Update login state
+        navigate('/home'); // Redirect to home page
       } else {
         const errorData = await response.json();
-        setServerError(errorData.error || "Login failed. Please try again.");
+        setServerError(errorData.error || 'Login failed. Please try again.');
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      setServerError("An unexpected error occurred. Please try again later.");
+      console.error('Error during login:', error);
+      setServerError('An unexpected error occurred. Please try again later.');
     }
   };
 
@@ -41,75 +38,49 @@ export default function Login() {
       <div className="bg-light p-4 rounded shadow-lg">
         <h1 className="text-center display-4 text-primary mb-4">Login</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          {/* Email Input */}
+          {/* Email Field */}
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email Address
-            </label>
+            <label htmlFor="email" className="form-label">Email Address</label>
             <input
               type="email"
               id="email"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
               placeholder="Enter your email"
-              {...register("email", {
-                required: "Email is required",
+              {...register('email', {
+                required: 'Email is required',
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
+                  message: 'Invalid email format',
                 },
               })}
             />
-            {errors.email && (
-              <div className="invalid-feedback">{errors.email.message}</div>
-            )}
+            {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
           </div>
-
-          {/* Password Input */}
+          {/* Password Field */}
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               id="password"
-              className={`form-control ${
-                errors.password ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
               placeholder="Enter your password"
-              {...register("password", {
-                required: "Password is required",
+              {...register('password', {
+                required: 'Password is required',
                 minLength: {
                   value: 8,
-                  message: "Password must be at least 8 characters",
+                  message: 'Password must be at least 8 characters',
                 },
               })}
             />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password.message}</div>
-            )}
+            {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
           </div>
-
-          {/* Display server-side error */}
+          {/* Display Server Error */}
           {serverError && (
             <div className="alert alert-danger" role="alert">
               {serverError}
             </div>
           )}
-
-          {/* Submit Button */}
-          <div className="d-flex justify-content-between align-items-center">
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-
-            {/* Signup Link */}
-            <div className="text-center mt-4">
-            <span>Don't have an account?</span>
-            <Link to="/signup" className="btn btn-link">
-              Sign up now!
-            </Link>
-            </div>
-          </div>
+          <button type="submit" className="btn btn-primary rounded-pill">Login</button>
         </form>
       </div>
     </div>

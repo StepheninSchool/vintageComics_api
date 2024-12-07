@@ -118,20 +118,21 @@ router.post('/login', async (req, res) => {
 
 // Logout route
 // SOURCE : https://www.npmjs.com/package/express-session
+
 router.post('/logout', (req, res) => {
   if (req.session) {
-    // Destroy the session
     req.session.destroy((err) => {
       if (err) {
-        console.error('Error destroying session:', err); // Log error for debugging
+        console.error('Error destroying session:', err);
         return res.status(500).json({ error: 'Failed to logout. Please try again.' });
       }
-      res.status(200).json({ message: 'User logged out successfully' });
+      res.status(200).json({ message: 'User logged out successfully.' });
     });
   } else {
-    res.status(400).json({ error: 'No active session found to logout' }); // Handle case where no session exists
+    res.status(400).json({ error: 'No active session to logout.' });
   }
 });
+
 
 // Get user session route
 router.get('/getSession', (req, res) => {

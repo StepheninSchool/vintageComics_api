@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url'
 import usersRoute from './routes/users.js'
 import productsRoute from './routes/products.js'
 
+
+
 const app = express()
 const PORT = process.env.PORT || 5000
 
@@ -13,7 +15,7 @@ const PORT = process.env.PORT || 5000
 // SOURCE : https://www.npmjs.com/package/cors#configuring-cors
 const corsOptions = {
   credentials: true, //allows cookies, allowing login session to be stored.
-  //origin: 'http://localhost:5173',
+  origin: 'http://localhost:5173',
 }
 
 // Resolve directory paths for ES Modules
