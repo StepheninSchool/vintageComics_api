@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { passwordSchema } from "../Utilities/passwordSchema.js";
 
 const apiUrl = import.meta.env.VITE_API_HOST;
 
@@ -141,7 +142,7 @@ export default function Signup() {
           )}
 
           {/* Submit Button */}
-          <button type="submit" className="btn btn-primary w-100 mb-3">
+          <button type="submit" className="btn btn-primary w-100 rounded-pill mb-3">
             Sign Up
           </button>
 

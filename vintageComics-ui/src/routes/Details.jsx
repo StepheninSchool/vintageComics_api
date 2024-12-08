@@ -74,12 +74,12 @@ export default function Details() {
       {/* Background container for styling */}
       <div className='bg-light p-4 rounded shadow-lg'>
         {/* Back button to navigate to the home page */}
-        <Link to='/home' className='btn btn-outline-secondary mb-3'>
+        <Link to='/home' className='btn btn-outline-secondary shadow mb-3'>
           Go Back
         </Link>
 
         {/* Comic title */}
-        <h1 className='text-center display-4 text-primary mb-4'>
+        <h1 className='text-center display-4 text-primary shadow mb-4'>
           Comic #{product.product_id}
         </h1>
 
@@ -95,7 +95,7 @@ export default function Details() {
               </h2>
               <p>
                 <strong>Description:</strong>{' '}
-                <span className='text-secondary'>{product.description}</span>
+                <span className='text-secondary '>{product.description}</span>
               </p>
               <p>
                 <strong>Price:</strong>{' '}
@@ -110,7 +110,7 @@ export default function Details() {
               </p>
               {/* Add to Cart button */}
               <button
-                className='btn btn-primary rounded-pill mt-2 mb-2 border align-self-stretch position-relative'
+                className='btn btn-primary rounded-pill shadow mt-2 mb-2 border align-self-stretch position-relative'
                 onClick={() => addToCart(product.product_id)}
               >
                 Add to Cart
@@ -126,11 +126,11 @@ export default function Details() {
             </div>
 
             {/* Right column: Product image */}
-            <div className='col-md-6 d-flex justify-content-center align-items-center'>
+            <div className='col-md-6 d-flex justify-content-center  align-items-center'>
               <img
                 src={`${apiUrl}/images/${product.image_filename}`} // Generate image URL
                 alt={`${product.name} cover`}
-                className='img-fluid rounded shadow'
+                className='img-fluid rounded shadow-lg mt-2'
                 style={{ maxHeight: '100%', objectFit: 'cover' }}
               />
             </div>

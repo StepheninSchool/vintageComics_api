@@ -57,7 +57,7 @@ export default function Home() {
                   <div className="d-flex justify-content-center">
                     <Link
                       to={`/details/${product.product_id}`}
-                      className="btn btn-primary rounded-pill mt-3"
+                      className="btn btn-primary rounded-pill shadow mt-3"
                     >
                       View Details
                     </Link>

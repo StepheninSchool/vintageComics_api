@@ -97,7 +97,7 @@ export default function Login() {
           )}
 
           {/* Submit Button */}
-          <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+          <button type="submit" className="btn btn-primary w-100 rounded-pill mb-3">Login</button>
 
           {/* Signup Link */}
           <div className="text-center">

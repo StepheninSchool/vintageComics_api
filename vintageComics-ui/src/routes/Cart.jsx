@@ -124,7 +124,7 @@ export default function Cart() {
         {cartItems.length === 0 ? (
           // If cart is empty, show a message with a link to shop
           <p className="text-center">
-            Your cart is empty. <Link to="/">Start shopping!</Link>
+            Your cart is empty. <Link to="/home">Start shopping!</Link>
           </p>
         ) : (
           <div>
