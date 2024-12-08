@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Nav from './ui/Nav';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,43 +7,34 @@ const apiUrl = import.meta.env.VITE_API_HOST;
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
 
-  // Check session status on page load
   useEffect(() => {
     async function checkSession() {
       try {
         const response = await fetch(`${apiUrl}/users/getSession`, {
-          credentials: 'include', // Send session cookie
+          credentials: 'include', // Include session cookie
         });
 
         if (response.ok) {
           const data = await response.json();
-          setIsLoggedIn(data.isLoggedIn);
+          setIsLoggedIn(data.isLoggedIn || false); // Update login state
         } else {
-          setIsLoggedIn(false);
+          setIsLoggedIn(false); // Default to logged out
         }
       } catch (error) {
         console.error('Error checking session:', error);
         setIsLoggedIn(false);
-      } finally {
-        setLoading(false); // Stop loading
       }
     }
 
     checkSession();
   }, []);
 
-  if (loading) {
-    // Show a loading indicator until session check is complete
-    return <p>Loading...</p>;
-  }
-
   return (
-    <div className='txt-lg'>
-      <h1>Welcome to Vintage Comics</h1>
+    <div className="app-container">
+      <h1 className="text-center my-3">Vintage Comics</h1>
       <Nav isLoggedIn={isLoggedIn} />
-      <Outlet context={setIsLoggedIn} />
+      <Outlet context={{ isLoggedIn, setIsLoggedIn }} />
     </div>
   );
 }

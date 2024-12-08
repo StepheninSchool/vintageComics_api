@@ -48,42 +48,22 @@ router.get('/:id', async (req, res) => {
 
 // PURCHASE Product Route
 router.post('/purchase', async (req, res) => {
+  const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart } = req.body;
 
-  const { street, city, province, country, postal_code, credit_card, credit_expire, credit_cvv, cart, invoice_amt, invoice_tax, invoice_total } = req.body
-  
-  // Ensure the user is logged in to make a purchase
-  if ( !req.session.user ) {
-    res.status(401).json({ error: 'Unauthorized access.' })
-    return
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'Unauthorized. Please login to proceed.' });
   }
 
-  
-  // Extract user ID from the session
-  const { user_id } = req.session.user
-
-  // Validate that all required fields are present
-  if (!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire || !credit_cvv || !cart || !invoice_amt || !invoice_tax || !invoice_total) {
-    return res.status(400).json({ error: 'All fields required to complete purchase' }) 
+  if (!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire || !credit_cvv || !cart) {
+    return res.status(400).json({ error: 'All fields are required for purchase.' });
   }
 
   try {
-    // Parse the cart to get product IDs and their quantities
-    const cartItems = cart.split(',').map(Number) 
-    const productQuantity = {} 
+    const userId = req.session.user.user_id;
 
-    // Count each product in the cart
-    cartItems.forEach((productId) => {
-      if (!productQuantity[productId]) {
-        productQuantity[productId] = 0
-      }
-      productQuantity[productId]++
-    })
-
-    // Create a new purchase record in the database
-    // SOURCE : https://www.prisma.io/docs/orm/reference/prisma-client-reference#create-1
     const purchase = await prisma.purchase.create({
       data: {
-        customer_id: user_id,
+        customer_id: userId,
         street,
         city,
         province,
@@ -92,33 +72,16 @@ router.post('/purchase', async (req, res) => {
         credit_card,
         credit_expire,
         credit_cvv,
-        invoice_amt,
-        invoice_tax,
-        invoice_total,
-        order_date: new Date() 
-      }
-    }) 
+        order_date: new Date(),
+      },
+    });
 
-    // Prepare purchase items to be inserted into database
-    const purchaseItems = Object.entries(productQuantity).map(([product_id, quantity]) => ({
-      purchase_id: purchase.purchase_id, 
-      // SOURCE : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
-      product_id: parseInt(product_id, 10),
-      quantity 
-    }))
-
-    // Insert all purchase items into the database
-    // SOURCE : https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-    await prisma.purchaseItem.createMany({
-      data: purchaseItems
-    })  
-
-    // Return success message along with purchase items
-    res.status(201).json({ message: 'Purchase completed successfully!', purchaseItems })
+    res.status(201).json({ message: 'Purchase successful!', purchase });
   } catch (error) {
-    console.error('Error completing purchase:', error)
-    res.status(500).json({ error: 'An error occurred while processing your purchase. Please try again.' }) // Handle unexpected errors
+    console.error('Purchase error:', error);
+    res.status(500).json({ error: 'An error occurred while processing your purchase.' });
   }
-})
+});
+
 
 export default router
