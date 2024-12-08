@@ -42,11 +42,11 @@ export default function Signup() {
   };
 
   return (
-    <div className="container my-5">
-      <div className="bg-light p-4 rounded shadow-lg">
-        <h1 className="text-center display-4 text-primary mb-4">Sign Up</h1>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="bg-light p-5 rounded shadow-lg" style={{ width: "100%", maxWidth: "400px" }}>
+        <h1 className="text-center mb-4 text-primary">Sign Up</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          {/* Email */}
+          {/* Email Field */}
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email Address
@@ -64,12 +64,10 @@ export default function Signup() {
                 },
               })}
             />
-            {errors.email && (
-              <div className="invalid-feedback">{errors.email.message}</div>
-            )}
+            {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
           </div>
 
-          {/* Password */}
+          {/* Password Field */}
           <div className="mb-3">
             <label htmlFor="password" className="form-label">
               Password
@@ -87,15 +85,13 @@ export default function Signup() {
                 },
               })}
             />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password.message}</div>
-            )}
+            {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
           </div>
 
-          {/* Display Detailed Password Errors */}
+          {/* Password Errors */}
           {passwordErrors.length > 0 && (
             <div className="alert alert-danger">
-              <ul>
+              <ul className="mb-0">
                 {passwordErrors.map((err, index) => (
                   <li key={index}>{err}</li>
                 ))}
@@ -103,7 +99,7 @@ export default function Signup() {
             </div>
           )}
 
-          {/* First Name */}
+          {/* First Name Field */}
           <div className="mb-3">
             <label htmlFor="first_name" className="form-label">
               First Name
@@ -111,22 +107,16 @@ export default function Signup() {
             <input
               type="text"
               id="first_name"
-              className={`form-control ${
-                errors.first_name ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.first_name ? "is-invalid" : ""}`}
               placeholder="Enter your first name"
               {...register("first_name", {
                 required: "First name is required",
               })}
             />
-            {errors.first_name && (
-              <div className="invalid-feedback">
-                {errors.first_name.message}
-              </div>
-            )}
+            {errors.first_name && <div className="invalid-feedback">{errors.first_name.message}</div>}
           </div>
 
-          {/* Last Name */}
+          {/* Last Name Field */}
           <div className="mb-3">
             <label htmlFor="last_name" className="form-label">
               Last Name
@@ -134,32 +124,31 @@ export default function Signup() {
             <input
               type="text"
               id="last_name"
-              className={`form-control ${
-                errors.last_name ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.last_name ? "is-invalid" : ""}`}
               placeholder="Enter your last name"
               {...register("last_name", {
                 required: "Last name is required",
               })}
             />
-            {errors.last_name && (
-              <div className="invalid-feedback">
-                {errors.last_name.message}
-              </div>
-            )}
+            {errors.last_name && <div className="invalid-feedback">{errors.last_name.message}</div>}
           </div>
 
-          {/* Server Errors */}
+          {/* Server Error Display */}
           {serverError && (
-            <div className="alert alert-danger" role="alert">
+            <div className="alert alert-danger text-center" role="alert">
               {serverError}
             </div>
           )}
 
           {/* Submit Button */}
-          <button type="submit" className="btn btn-primary w-100 rounded-pill">
+          <button type="submit" className="btn btn-primary w-100 mb-3">
             Sign Up
           </button>
+
+          {/* Login Link */}
+          <div className="text-center">
+            Already have an account? <a href="/login" className="text-primary">Log In</a>
+          </div>
         </form>
       </div>
     </div>

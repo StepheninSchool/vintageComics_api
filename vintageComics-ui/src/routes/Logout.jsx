@@ -38,10 +38,18 @@ export default function Logout() {
   }, [setIsLoggedIn, navigate]); // Add dependencies to the useEffect hook
 
   return (
-    <div className="container">
-      {/* Display a heading and the logout message */}
-      <h2>Logout</h2>
-      <p>{message}</p>
+    <div className="container my-5">
+      <div className="bg-light p-4 rounded shadow-lg text-center">
+        <h1 className="text-danger mb-4">Logout</h1>
+        <p className="lead">{message}</p>
+        {/* Redirect to home page */}
+        <button
+          className="btn btn-primary mt-3"
+          onClick={() => navigate('/home')}
+        >
+          Go to Home
+        </button>
+      </div>
     </div>
   );
 }
